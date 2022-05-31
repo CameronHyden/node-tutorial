@@ -1,22 +1,40 @@
-const { FORMERR } = require("dns");
-const http = require("http");
+const { readFile, writeFile } = require("fs").promises;
+// const util = require("util");
 
-const server = http.createServer((reg, res) => {
-  if (reg.url === "/") {
-    res.end("home page");
-  }
-  if (req.url === "/about") {
-    //BLOCKING CODE
-    for (let i = 0; i < 1000; i++) {
-      for (let j = 0; j < 1000; j++) {
-        console.log(`${j} ${i}`);
-      }
-    }
-    res.end("about page");
-  }
-  res.end("error");
-});
+// const readFilePromise = util.promisify(readFile);
+// const writeFilePromise = util.promisify(writeFile);
 
-server.listen(5000, () => {
-  console.log("server is listening on port 5000.....");
-});
+const start = async () => {
+  try {
+    const first = await readFile("./content/first.txt", "utf8");
+    const second = await readFile("./content/second.txt", "utf8");
+    await writeFile(
+      "./content/result-mind-grenade.txt",
+      `this is cool: ${first} ${second}`,
+      { flag: "a" }
+    );
+    console.log(first, second);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
+
+// const getText = (path) => {
+//   return new Promise((resolve, reject) => {
+//     readFile(path, "utf8", (err, data) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(data);
+//       }
+//     });
+//   });
+// };
+
+// getText("./content/fit.txt")
+//   .then((result) => console.log(result))
+//   .catch((err) => console.log(err));
+
+// much cleaner example compared to 11-fs-async, no awks nesting etc
